@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import "../../../style.scss";
+
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Roboto", sans-serif;
+}
+
+.rightBar{
+    @include themify ($themes) {
+        flex: 3;
+        position: sticky;
+        top: 50px;
+        height: calc(100vh - 50px);
+        overflow: scroll;
+        background-color: themed("backgroundSoft");
+        color: themed("textColor");
+
+        &::-webkit-scrollbar{
+            display: none;
+        }
+
+        @include mobile {
+            display: none;
+        }
+
+        @include tablet {
+            display: none;
+        }
+
+        @include tablet-landscape {
+            display: none;
+        }
+
+        .container{
+            padding: 20px;
+            padding-left: 0;
+
+            .item{
+                -webkit-box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
+                -moz-box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
+                box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
+
+                padding: 20px;
+                margin-bottom: 20px;
+                background-color: themed("backgroundColor");
+
+                span{
+                    color: gray;
+                }
+
+                .user{
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    margin: 20px 0px;
+
+                    .userInfo{
+                        
+                        display: flex;
+                        align-items: center;
+                        gap: 20px;
+                        position: relative;
+
+                        img{
+                            width: 40px;
+                            height: 40px;
+                            border-radius: 50%;
+                            object-fit: cover;
+                        }
+
+                        .online{
+                            width: 12px;
+                            height: 12px;
+                            border-radius: 50%;
+                            background-color: limegreen;
+                            position: absolute;
+                            top: 0;
+                            left: 30px;
+                        }
+
+                        p{
+                            flex: 3;
+                            color: themed("textColorSoft");
+                        }
+
+                        span{
+                            font-weight: 500;
+                            color: themed("textColor");
+                        }
+                    }
+
+                    .date {
+                        
+                        color: themed("textColorSoft");
+                        font-size: 12px;
+                    }
+
+                    .buttons{
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+
+                        button{
+                            border: none;
+                            padding: 5px;
+                            color: white;
+                            cursor: pointer;
+
+                            &:first-child{
+                                background-color: #5271ff;
+                            }
+
+                            &:last-child{
+                                background-color: #f0544f;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }    
+}

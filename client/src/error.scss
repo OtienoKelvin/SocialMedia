@@ -1,0 +1,59 @@
+@mixin themify ($themes) {
+    @each $theme, $map in $themes {
+        .theme-#{$theme} & {
+            $theme-map: () !global;
+            @each $key, $submap in $map {
+                $value: map-get(map-get($themes, $theme), "#{$key}");
+                $theme-map: map-merge(
+                    $theme-map,
+                    (
+                        $key: $value,
+                    )
+                )
+            }
+            @content;
+            $theme-map: null !global;
+        }
+    }
+}
+@mixin themify ($themes) {
+    @each $theme, $map in $themes {
+        .theme-#{$theme} & {
+            $theme-map: ();
+            @each $key, $value in $map {
+                $theme-map: map-merge($theme-map, ($key: $value));
+            }
+            @content;
+        }
+    }
+}
+
+
+// Mixin to apply themes
+@mixin themify($themes) {
+    @each $theme, $map in $themes {
+        // Create a class for each theme
+        .theme-#{$theme} & {
+            // Iterate over each property in the theme map
+            @each $key, $value in $map {
+                // Define CSS custom properties for each theme property
+                --#{$theme}-#{$key}: #{$value};
+            }
+            // Apply the content within the theme context
+            @content;
+        }
+    }
+}
+
+// Function to retrieve the value of a theme property
+@function themed($theme, $key) {
+    // Get the value of the CSS custom property
+    $value: var(--#{$theme}-#{$key});
+    @if ($value != null) {
+        // Return the value if it exists
+        @return $value;
+    } @else {
+        // Throw an error if the key is not found
+        @error "Key `#{$key}` not found in the theme map for theme `#{$theme}`!";
+    }
+}

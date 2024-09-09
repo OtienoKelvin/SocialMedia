@@ -1,0 +1,70 @@
+@use "sass:map";
+
+// Define the themes with their respective properties
+$themes: (
+    light: (
+        textColor: #000,
+        backgroundColor: white,
+        logoColor: darkblue,
+        backgroundSoft: #f6f3f3,
+        border: lightgray,
+        textColorSoft: #555
+    ),
+    dark: (
+        textColor: whitesmoke,
+        backgroundColor: #222,
+        logoColor: white,
+        backgroundSoft: #333,
+        border: #444,
+        textColorSoft: lightgray
+    ),
+);
+
+
+
+
+@mixin themify($themes) {
+    @each $theme, $map in $themes {
+        .theme-#{$theme} & {
+            $theme-map: () !global; // Create a variable to store the theme map
+            @each $key, $submap in $map {
+                $value: map-get(map-get($themes, $theme), "#{$key}"); // Get the value of the key
+                $theme-map: map-merge(
+                    $theme-map,
+                    (
+                        $key: $value,
+                    )
+                ) !global;
+            }
+            @content; // Apply the content within the theme context
+            $theme-map: null !global; // Reset the theme map
+        }
+    }
+}
+@function themed($key) {
+    @return map-get($theme-map, $key); // Returns the value of the key
+}
+
+@mixin mobile {
+    @media (max-width: 480px) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @media (max-width: 768px) {
+        @content;
+    }
+}
+
+@mixin tablet-landscape {
+    @media (max-width: 992px) {
+        @content;
+    }
+}
+
+@mixin laptop {
+    @media (max-width: 1200px) {
+        @content;
+    }
+}
