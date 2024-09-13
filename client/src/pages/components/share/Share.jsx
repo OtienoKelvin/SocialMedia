@@ -58,7 +58,7 @@ const Share = () => {
                     <div className="left">
                         {currentUser?.profilePic ?
                         <img
-                            src={currentUser.profilePic}
+                            src={"/upload/" + currentUser.profilePic}
                             alt=""
                         /> : <AccountCircleIcon style={{width:"40px", height:"40px", color: "lightblue"}}/>}
                         <input 

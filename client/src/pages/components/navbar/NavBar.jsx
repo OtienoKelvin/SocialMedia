@@ -41,7 +41,7 @@ const NavBar = () => {
                 <NotificationsOutlinedIcon />
                 <div className="user">
                     {currentUser?.profilePic ?<img
-                        src={currentUser.profilePic}
+                        src={"/upload/" + currentUser.profilePic}
                         alt=""
                     /> : <AccountCircleIcon style={{width:"30px", height:"30px", color: "lightblue"}}/>}
                     <span>{currentUser.username}</span>

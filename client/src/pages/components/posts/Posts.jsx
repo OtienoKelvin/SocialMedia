@@ -4,12 +4,13 @@ import React from 'react'
 import { useQuery } from '@tanstack/react-query'
 import instance from '../../../axios'
 
-const Posts = () => {
+const Posts = ({userId}) => {
+  console.log(userId)
 
     const {isLoading, error, data} = useQuery({
         queryKey: ['posts'],
         queryFn: async () => {
-            const res = await instance.get('/posts')
+            const res = await instance.get(userId ? `posts?userId=${userId}` :"/posts")
             return res.data
         }
     })
@@ -18,7 +19,7 @@ const Posts = () => {
 
   return (
     <div className='posts'>
-        {error ? "Something went wrong" : isLoading ? "Loading..." : data.map(post => (
+        {error ? "Something went wrong" : isLoading ? "Loading..." : data?.map(post => (
            <Post post={post} key={post.id} /> 
            
         ))}

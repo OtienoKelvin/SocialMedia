@@ -5,6 +5,8 @@ import moment from "moment/moment.js";
 dotenv.config();
 
 const getPosts = (req, res) => {
+    console.log(req.query)
+    const userId = req.query.userId;
     const token = req.cookies.access_token;
     if(!token) return res.status(401).json("Not authenticated!");
 
@@ -12,13 +14,16 @@ const getPosts = (req, res) => {
         if(err) return res.status(403).json("Invalid token!");
     
 
-        const q = "SELECT P.*, u.id userId, u.username, u.profilePic FROM posts p JOIN users u ON p.userId = u.id LEFT JOIN relationships r ON p.userId = r.followedUserId WHERE r.followerUserId = ? OR p.userId = ? ORDER BY p.createdAt DESC";
+        const q = userId ? "SELECT P.*, u.id userId, u.username, u.profilePic FROM posts p JOIN users u ON p.userId = u.id WHERE p.userId = ? ORDER BY p.createdAt DESC" : 
+        "SELECT P.*, u.id userId, u.username, u.profilePic FROM posts p JOIN users u ON p.userId = u.id LEFT JOIN relationships r ON p.userId = r.followedUserId WHERE r.followerUserId = ? OR p.userId = ? ORDER BY p.createdAt DESC";
+        
 
-        db.query(q, [userInfo.id, userInfo.id], (err, data) => {
+        db.query(q, [userId ? userId : userInfo.id, userInfo.id], (err, data) => {
             if(err) return res.status(500).json(err);
             return res.status(200).json(data);
         })
-    })    
+    }) 
+    console.log(userId)   
 }
 
 

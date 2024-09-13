@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { Link } from 'react-router-dom';
 import './post.scss'
@@ -9,20 +9,45 @@ import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlin
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Comments from '../comments/Comments';
 import moment from 'moment';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import instance from '../../../axios';
+import { AuthContext } from '../../../context/authContext';
 
 
 const Post = ({post}) => {
 
     const [commentOpen, setCommentOpen] = useState(false);
+    const {currentUser} = useContext(AuthContext);
+    const queryClient = useQueryClient();
 
-    const liked = false;
+    const {isLoading, error, data} = useQuery({
+        queryKey: ['likes', post.id],
+        queryFn: async () => {
+            const res = await instance.get(`/likes?postId=${post.id}`);
+            return res.data;
+        }
+    });
+
+    const mutation = useMutation({
+        mutationFn: (liked) => {
+            if(liked) return instance.delete(`/likes?postId=${post.id}`);
+            return instance.post("/likes", {postId: post.id});
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(['likes']);
+        }
+    })
+    const handleLike = async () => {
+        mutation.mutate(data.includes(currentUser?.id));
+    }
+    
 
   return (
     <div className='post'>
         <div className="container">
             <div className="user">
                 <div className="userInfo">
-                    {post?.profilePic ?<img src={post.profilePic} alt="" /> : <AccountCircleIcon style={{width:"40px", height:"40px", color: "lightblue"}}/>}
+                    {post?.profilePic ?<img src={"./upload/" + post.profilePic} alt="" /> : <AccountCircleIcon style={{width:"40px", height:"40px", color: "lightblue"}}/>}
                     <div className="details">
                         <Link to={`/profile/${post.userId}`} style={{textDecoration:"none", color:"inherit"}}>
                             <span className='name'>{post.username}</span>                            
@@ -38,8 +63,8 @@ const Post = ({post}) => {
             </div>
             <div className="info">
                 <div className="item">
-                    {liked ? <FavoriteOutlinedIcon/> : <FavoriteBorderOutlinedIcon/>}
-                    12 Likes
+                    {data?.includes(currentUser?.id) ? <FavoriteOutlinedIcon style={{color:"red"}} onClick={handleLike}/> : <FavoriteBorderOutlinedIcon onClick={handleLike}/>}
+                    {data?.length} Likes 
                 </div>
                 <div className="item" onClick={() => setCommentOpen(!commentOpen)}>
                     <TextsmsOutlinedIcon/>

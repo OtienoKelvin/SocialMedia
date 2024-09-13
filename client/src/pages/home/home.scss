@@ -12,6 +12,7 @@
     @include themify ($themes) {
         background-color: themed("backgroundSoft");
         padding: 20px 50px;
+        min-height: 100vh;
 
 
 

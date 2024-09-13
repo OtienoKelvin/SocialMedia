@@ -25,7 +25,7 @@ const LeftBar = () => {
             <div className="container">
                 <div className="menu">
                     <div className="user">
-                        {currentUser?.profilePic ? <img src={currentUser?.profilePic} alt="" /> : <AccountCircleIcon style={{width:"30px", height:"30px", color: "lightblue"}}/>}
+                        {currentUser?.profilePic ? <img src={"/upload/" + currentUser?.profilePic} alt="" /> : <AccountCircleIcon style={{width:"30px", height:"30px", color: "lightblue"}}/>}
                         <span>{currentUser.username}</span>
                     </div>
                     <div className="item">
